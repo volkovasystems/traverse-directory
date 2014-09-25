@@ -41,13 +41,17 @@
 	@include:
 		{
 			"check-directory-exists@github.com/volkovasystems": "checkDirectoryExists",
-			"fs@nodejs": "fs"
+			"fs@nodejs": "fs",
+			"path@nodejs": "path"
 		}
 	@end-include
 */
 var traverseDirectory = function traverseDirectory( domainDirectory ){
 	if( checkDirectoryExists( domainDirectory ) ){
-		return fs.readdirSync( domainDirectory );
+		return fs.readdirSync( domainDirectory )
+			.map( function onEachFilePath( filePath ){
+				return path.resolve( ".", domainDirectory, filePath );
+			} );
 		
 	}else{
 		return [ ];
@@ -56,5 +60,6 @@ var traverseDirectory = function traverseDirectory( domainDirectory ){
 
 var checkDirectoryExists = require( "./check-directory-exists/check-directory-exists.js" );
 var fs = require( "fs" );
+var path = require( "path" );
 
 module.exports = traverseDirectory;
